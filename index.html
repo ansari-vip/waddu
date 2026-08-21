@@ -72,31 +72,43 @@
       transform: scale(0.95);
     }
 
-    #yesBtn {
-      background-color: #ff4d6d;
-      color: white;
-    }
+    #yesBtn { background-color: #ff4d6d; color: white; }
+    #noBtn { background-color: #6c757d; color: white; position: absolute; }
 
-    #noBtn {
-      background-color: #6c757d;
-      color: white;
-      position: absolute;
-    }
-
-    /* Success Celebration Screen */
-    #successScreen {
-      display: none;
-    }
-
+    /* Success Screen & Calendar Styles */
+    #successScreen { display: none; }
+    
     #successScreen h1 {
       color: #ff4d6d;
       font-size: 1.8rem;
+      margin-bottom: 10px;
     }
 
     #successScreen p {
       color: #555;
       font-size: 1.1rem;
-      margin-top: 10px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      border: 2px solid #ff4d6d;
+      border-radius: 15px;
+      color: #333;
+      outline: none;
+      font-family: inherit;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    #confirmBtn {
+      background-color: #28a745;
+      color: white;
+      width: 100%;
     }
   </style>
 </head>
@@ -112,24 +124,26 @@
     </div>
   </div>
 
-  <!-- Success Screen (After Clicking Yes) -->
+  <!-- Success Screen (With Calendar) -->
   <div class="card" id="successScreen">
     <img class="gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWc1bWtsYndrYXA1cjUzbTR1cTBoMm1wMm0wbmF6cmw1ZnR0Z2ppOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/T86i6yDyOYz7J6dPhf/giphy.gif" alt="Happy Hug" />
     <h1>Yay! It's a Date! 🎉❤️</h1>
-    <p>Best decision ever! Can't wait! 🥰✨</p>
+    <p>Kab free ho aap? Date select karo: 🥰</p>
+    
+    <!-- Date Picker (Calendar) -->
+    <input type="date" id="datePicker" />
+    
+    <button id="confirmBtn" onclick="sendDate()">Confirm Date 📅</button>
   </div>
 
   <script>
     function dodgeNo() {
       const btn = document.getElementById("noBtn");
-      
       const padding = 30;
       const maxX = window.innerWidth - btn.offsetWidth - padding;
       const maxY = window.innerHeight - btn.offsetHeight - padding;
-
       const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
       const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
-
       btn.style.position = "fixed";
       btn.style.left = `${randomX}px`;
       btn.style.top = `${randomY}px`;
@@ -138,6 +152,25 @@
     function showCelebration() {
       document.getElementById("mainCard").style.display = "none";
       document.getElementById("successScreen").style.display = "block";
+    }
+
+    function sendDate() {
+      const selectedDate = document.getElementById("datePicker").value;
+      
+      if(!selectedDate) {
+        alert("Pehle ek date select karo na! 🥺");
+        return;
+      }
+      
+      // YAHAN APNA NUMBER DALEIN (Country code 91 ke sath bina + ke)
+      // Example: 919876543210
+      const phoneNumber = "918175053034"; 
+      
+      const message = `Yay! 🥰 I am ready for the date on ${selectedDate}. Can't wait! 💖`;
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      
+      // User ko aapke WhatsApp par redirect kar dega
+      window.location.href = whatsappUrl;
     }
   </script>
 
