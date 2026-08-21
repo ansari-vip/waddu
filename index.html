@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Date Proposal</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffe6e6;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: #d63384;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .btn-container {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 25px;
+    }
+
+    button {
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      transition: transform 0.1s ease;
+    }
+
+    #yesBtn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    #noBtn {
+      background-color: #dc3545;
+      color: white;
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Wahida, will you go on a date with me? 💖</h1>
+
+  <div class="btn-container">
+    <button id="yesBtn" onclick="acceptDate()">Yes 🥰</button>
+    <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No 😜</button>
+  </div>
+
+  <script>
+    function moveButton() {
+      const btn = document.getElementById("noBtn");
+
+      // Screen ke andar random position calculate karna
+      const maxX = window.innerWidth - btn.offsetWidth - 20;
+      const maxY = window.innerHeight - btn.offsetHeight - 20;
+
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+
+      btn.style.position = "fixed";
+      btn.style.left = `${randomX}px`;
+      btn.style.top = `${randomY}px`;
+    }
+
+    function acceptDate() {
+      alert("Yay! Best decision ever! ❤️🎉");
+    }
+  </script>
+
+</body>
+</html>
