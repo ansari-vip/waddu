@@ -3,87 +3,141 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Date Proposal</title>
+  <title>Date Proposal for Wahida 💖</title>
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #ffe6e6;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ffe6e6, #ffccd5);
+      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+      text-align: center;
+      padding: 20px;
       overflow: hidden;
     }
 
+    .card {
+      background: white;
+      padding: 35px 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      max-width: 420px;
+      width: 100%;
+    }
+
+    img.gif {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
     h1 {
-      font-size: 2.2rem;
+      font-size: 1.6rem;
       color: #d63384;
-      margin-bottom: 30px;
-      text-align: center;
+      margin-bottom: 25px;
+      line-height: 1.4;
     }
 
     .btn-container {
-      position: relative;
-      width: 100%;
-      height: 200px;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 25px;
+      gap: 20px;
+      position: relative;
+      min-height: 60px;
     }
 
     button {
-      padding: 12px 30px;
+      padding: 12px 28px;
       font-size: 1.1rem;
-      font-weight: bold;
+      font-weight: 700;
       border: none;
-      border-radius: 25px;
+      border-radius: 30px;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      transition: transform 0.1s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: transform 0.15s ease;
+    }
+
+    button:active {
+      transform: scale(0.95);
     }
 
     #yesBtn {
-      background-color: #28a745;
+      background-color: #ff4d6d;
       color: white;
     }
 
     #noBtn {
-      background-color: #dc3545;
+      background-color: #6c757d;
       color: white;
       position: absolute;
+    }
+
+    /* Success Celebration Screen */
+    #successScreen {
+      display: none;
+    }
+
+    #successScreen h1 {
+      color: #ff4d6d;
+      font-size: 1.8rem;
+    }
+
+    #successScreen p {
+      color: #555;
+      font-size: 1.1rem;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Wahida, will you go on a date with me? 💖</h1>
+  <!-- Main Proposal Screen -->
+  <div class="card" id="mainCard">
+    <img class="gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHI1OHR1NGVsc2t5Z3VqZnVmMzlkZXJtOWJueGFvOTdwMnkxbzZqZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute Cat" />
+    <h1>Wahida, will you go on a date with me? 💖</h1>
+    <div class="btn-container">
+      <button id="yesBtn" onclick="showCelebration()">Yes 🥰</button>
+      <button id="noBtn" onmouseover="dodgeNo()" ontouchstart="dodgeNo()" onclick="dodgeNo()">No 😜</button>
+    </div>
+  </div>
 
-  <div class="btn-container">
-    <button id="yesBtn" onclick="acceptDate()">Yes 🥰</button>
-    <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No 😜</button>
+  <!-- Success Screen (After Clicking Yes) -->
+  <div class="card" id="successScreen">
+    <img class="gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWc1bWtsYndrYXA1cjUzbTR1cTBoMm1wMm0wbmF6cmw1ZnR0Z2ppOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/T86i6yDyOYz7J6dPhf/giphy.gif" alt="Happy Hug" />
+    <h1>Yay! It's a Date! 🎉❤️</h1>
+    <p>Best decision ever! Can't wait! 🥰✨</p>
   </div>
 
   <script>
-    function moveButton() {
+    function dodgeNo() {
       const btn = document.getElementById("noBtn");
+      
+      const padding = 30;
+      const maxX = window.innerWidth - btn.offsetWidth - padding;
+      const maxY = window.innerHeight - btn.offsetHeight - padding;
 
-      // Screen ke andar random position calculate karna
-      const maxX = window.innerWidth - btn.offsetWidth - 20;
-      const maxY = window.innerHeight - btn.offsetHeight - 20;
-
-      const randomX = Math.floor(Math.random() * maxX);
-      const randomY = Math.floor(Math.random() * maxY);
+      const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
 
       btn.style.position = "fixed";
       btn.style.left = `${randomX}px`;
       btn.style.top = `${randomY}px`;
     }
 
-    function acceptDate() {
-      alert("Yay! Best decision ever! ❤️🎉");
+    function showCelebration() {
+      document.getElementById("mainCard").style.display = "none";
+      document.getElementById("successScreen").style.display = "block";
     }
   </script>
 
