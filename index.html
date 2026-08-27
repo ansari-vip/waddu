@@ -39,7 +39,7 @@
       50% { opacity: 1; transform: scale(1.05); }
     }
 
-    /* Screen par float hone wala container */
+    /* Screen par float hone wala container (10s) */
     .float-container {
       position: absolute;
       top: 50%;
@@ -47,17 +47,17 @@
       width: 0;
       height: 0;
       pointer-events: none;
-      animation: floatAround 60s ease-in-out forwards;
+      animation: floatAround 10s ease-in-out forwards;
     }
 
-    /* Gol-gol ghoomne wala ring */
+    /* Gol-gol ghoomne wala ring (10s) */
     .bundle-ring {
       position: absolute;
       width: 0;
       height: 0;
       pointer-events: none;
       transform: translate(-50%, -50%);
-      animation: continuousSpin 60s linear forwards;
+      animation: continuousSpin 10s linear forwards;
     }
 
     .text-item {
@@ -106,32 +106,31 @@
       50% { opacity: 0; }
     }
 
-    /* Fast spin animation */
+    /* 10s spin animation */
     @keyframes continuousSpin {
       0% {
         transform: translate(-50%, -50%) rotate(0deg) scale(0.3);
         opacity: 0;
       }
-      2% {
-        transform: translate(-50%, -50%) rotate(72deg) scale(1);
+      5% {
+        transform: translate(-50%, -50%) rotate(180deg) scale(1);
         opacity: 1;
       }
-      97% {
+      90% {
         opacity: 1;
       }
       100% {
-        transform: translate(-50%, -50%) rotate(10800deg) scale(0.2);
+        transform: translate(-50%, -50%) rotate(3600deg) scale(0.2);
         opacity: 0;
       }
     }
 
-    /* Screen ke alag alag kono me ghoomne ka path */
+    /* Screen par float karne ka path (10s) */
     @keyframes floatAround {
       0%   { transform: translate(-50%, -50%); }
-      20%  { transform: translate(-80%, -80%); }
-      40%  { transform: translate(-20%, -30%); }
-      60%  { transform: translate(-70%, -40%); }
-      80%  { transform: translate(-30%, -70%); }
+      25%  { transform: translate(-75%, -75%); }
+      50%  { transform: translate(-25%, -35%); }
+      75%  { transform: translate(-75%, -35%); }
       100% { transform: translate(-50%, -50%); }
     }
   </style>
@@ -184,11 +183,11 @@
       floatWrap.appendChild(ring);
       document.body.appendChild(floatWrap);
 
-      // 60 Seconds (60000ms) baad circle remove hokar typing shuru hogi
+      // Thik 10 seconds (10000ms) baad circle fade hokar typing aayegi
       setTimeout(() => {
         floatWrap.remove();
         showTypewriterMessage();
-      }, 60000);
+      }, 10000);
     }
 
     function showTypewriterMessage() {
@@ -201,7 +200,7 @@
         if (index < finalMessage.length) {
           textElem.textContent += finalMessage.charAt(index);
           index++;
-          setTimeout(typeNextChar, 100); // Typing speed
+          setTimeout(typeNextChar, 100);
         }
       }
       typeNextChar();
