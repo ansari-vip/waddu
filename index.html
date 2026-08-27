@@ -13,25 +13,25 @@
     }
 
     body {
-      background: radial-gradient(circle, #20052b, #05010a);
+      background: #06010a;
       height: 100vh;
       overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Arial Black', Impact, sans-serif;
     }
 
     .hint {
-      color: #ff69b4;
-      font-size: 1.5rem;
-      font-weight: 600;
+      color: #ff3377;
+      font-size: 1.4rem;
       letter-spacing: 2px;
       animation: pulse 1.5s infinite;
       pointer-events: none;
       text-align: center;
-      text-shadow: 0 0 10px rgba(255, 105, 180, 0.6);
-      transition: opacity 0.5s ease;
+      text-shadow: 0 0 15px rgba(255, 51, 119, 0.8);
+      position: absolute;
+      z-index: 10;
     }
 
     @keyframes pulse {
@@ -39,38 +39,62 @@
       50% { opacity: 1; transform: scale(1.05); }
     }
 
-    /* Screen par float hone wala container (10s) */
-    .float-container {
+    /* Tunnel Container */
+    #tunnel-wrapper {
       position: absolute;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      pointer-events: none;
+    }
+
+    .tunnel-ring {
+      position: absolute;
+      width: 0;
+      height: 0;
       top: 50%;
       left: 50%;
-      width: 0;
-      height: 0;
-      pointer-events: none;
-      animation: floatAround 10s ease-in-out forwards;
-    }
-
-    /* Gol-gol ghoomne wala ring (10s) */
-    .bundle-ring {
-      position: absolute;
-      width: 0;
-      height: 0;
-      pointer-events: none;
       transform: translate(-50%, -50%);
-      animation: continuousSpin 10s linear forwards;
     }
 
-    .text-item {
+    .neon-text {
       position: absolute;
       white-space: nowrap;
       font-weight: 900;
-      font-size: 2.2rem;
-      color: #ff2a74;
-      text-shadow: 0 0 15px #ff2a74, 0 0 30px #ff0055, 0 0 45px #ff75a0;
-      transform: translate(-50%, -50%);
+      color: #fff;
+      text-transform: uppercase;
+      transform-origin: center center;
+      text-shadow: 
+        0 0 5px #fff,
+        0 0 10px #ff1a75,
+        0 0 20px #ff1a75,
+        0 0 40px #ff0055,
+        0 0 60px #ff0055;
     }
 
-    /* Typing message box */
+    /* Har ring ki slow aur smooth rotation */
+    .spin-cw {
+      animation: rotateClockwise 25s linear infinite;
+    }
+    .spin-ccw {
+      animation: rotateCounter 22s linear infinite;
+    }
+
+    @keyframes rotateClockwise {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to   { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @keyframes rotateCounter {
+      from { transform: translate(-50%, -50%) rotate(360deg); }
+      to   { transform: translate(-50%, -50%) rotate(0deg); }
+    }
+
+    /* 10 sec baad typing message */
     #final-message-box {
       display: none;
       position: absolute;
@@ -79,25 +103,27 @@
       transform: translate(-50%, -50%);
       text-align: center;
       width: 90%;
-      max-width: 600px;
+      max-width: 650px;
+      z-index: 20;
     }
 
     #typewriter-text {
-      color: #fff;
-      font-size: 2rem;
-      font-weight: 700;
+      color: #ffffff;
+      font-size: 2.2rem;
+      font-weight: 900;
       line-height: 1.5;
-      text-shadow: 0 0 15px #ff2a74, 0 0 25px #ff75a0;
+      text-shadow: 0 0 10px #fff, 0 0 20px #ff1a75, 0 0 40px #ff0055;
       display: inline-block;
     }
 
     .cursor {
       display: inline-block;
-      width: 3px;
-      height: 2.2rem;
-      background-color: #ff2a74;
+      width: 4px;
+      height: 2.4rem;
+      background-color: #ff1a75;
       vertical-align: bottom;
-      margin-left: 5px;
+      margin-left: 6px;
+      box-shadow: 0 0 10px #ff1a75;
       animation: blink 0.7s infinite;
     }
 
@@ -105,107 +131,91 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0; }
     }
-
-    /* 10s spin animation */
-    @keyframes continuousSpin {
-      0% {
-        transform: translate(-50%, -50%) rotate(0deg) scale(0.3);
-        opacity: 0;
-      }
-      5% {
-        transform: translate(-50%, -50%) rotate(180deg) scale(1);
-        opacity: 1;
-      }
-      90% {
-        opacity: 1;
-      }
-      100% {
-        transform: translate(-50%, -50%) rotate(3600deg) scale(0.2);
-        opacity: 0;
-      }
-    }
-
-    /* Screen par float karne ka path (10s) */
-    @keyframes floatAround {
-      0%   { transform: translate(-50%, -50%); }
-      25%  { transform: translate(-75%, -75%); }
-      50%  { transform: translate(-25%, -35%); }
-      75%  { transform: translate(-75%, -35%); }
-      100% { transform: translate(-50%, -50%); }
-    }
   </style>
 </head>
 <body>
 
-  <div class="hint" id="hint">✨ Tap anywhere on the screen ✨</div>
+  <div class="hint" id="hint">✨ Screen par click karein ✨</div>
+  
+  <div id="tunnel-wrapper"></div>
 
   <div id="final-message-box">
     <span id="typewriter-text"></span><span class="cursor"></span>
   </div>
 
   <script>
-    const circleMessage = "I LOVE YOU ❤️";
-    const totalWords = 8;
-    const radius = 220;
+    const ringConfigs = [
+      { radius: 100, count: 6,  fontSize: 1.1, dir: 'spin-cw' },
+      { radius: 160, count: 8,  fontSize: 1.3, dir: 'spin-ccw' },
+      { radius: 230, count: 10, fontSize: 1.5, dir: 'spin-cw' },
+      { radius: 310, count: 12, fontSize: 1.7, dir: 'spin-ccw' },
+      { radius: 400, count: 14, fontSize: 1.9, dir: 'spin-cw' }
+    ];
+
+    const message = "I LOVE YOU ♡";
+    const finalMessage = "Rizwan aap se bahut pyar karta hai ❤️";
     let isTriggered = false;
 
-    const finalMessage = "Rizwan aap se bahut pyar karta hai ❤️";
+    function buildNeonTunnel() {
+      const container = document.getElementById("tunnel-wrapper");
+
+      ringConfigs.forEach(config => {
+        const ring = document.createElement("div");
+        ring.className = `tunnel-ring ${config.dir}`;
+
+        for (let i = 0; i < config.count; i++) {
+          const angle = (i / config.count) * (2 * Math.PI);
+          const x = Math.cos(angle) * config.radius;
+          const y = Math.sin(angle) * config.radius;
+          const deg = (angle * 180) / Math.PI + 90;
+
+          const span = document.createElement("span");
+          span.className = "neon-text";
+          span.innerText = message;
+          span.style.fontSize = `${config.fontSize}rem`;
+          span.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${deg}deg)`;
+
+          ring.appendChild(span);
+        }
+        container.appendChild(ring);
+      });
+    }
 
     function startExperience() {
       if (isTriggered) return;
       isTriggered = true;
 
-      // Tap hint ko hide karein
-      document.getElementById("hint").style.opacity = "0";
+      document.getElementById("hint").style.display = "none";
+      const tunnel = document.getElementById("tunnel-wrapper");
+      tunnel.style.opacity = "1";
 
-      // Floating wrapper
-      const floatWrap = document.createElement("div");
-      floatWrap.className = "float-container";
-
-      // Rotating Ring
-      const ring = document.createElement("div");
-      ring.className = "bundle-ring";
-
-      for (let i = 0; i < totalWords; i++) {
-        const angle = (i / totalWords) * (2 * Math.PI);
-        const itemX = Math.cos(angle) * radius;
-        const itemY = Math.sin(angle) * radius;
-        const deg = (angle * 180) / Math.PI + 90;
-
-        const span = document.createElement("span");
-        span.className = "text-item";
-        span.innerText = circleMessage;
-        span.style.transform = `translate(${itemX}px, ${itemY}px) rotate(${deg}deg)`;
-
-        ring.appendChild(span);
-      }
-
-      floatWrap.appendChild(ring);
-      document.body.appendChild(floatWrap);
-
-      // Thik 10 seconds (10000ms) baad circle fade hokar typing aayegi
+      // 10 Second baad ring hatkar message aayega
       setTimeout(() => {
-        floatWrap.remove();
-        showTypewriterMessage();
+        tunnel.style.opacity = "0";
+        setTimeout(() => {
+          tunnel.remove();
+          showTypewriter();
+        }, 800);
       }, 10000);
     }
 
-    function showTypewriterMessage() {
+    function showTypewriter() {
       const box = document.getElementById("final-message-box");
       const textElem = document.getElementById("typewriter-text");
       box.style.display = "block";
 
       let index = 0;
-      function typeNextChar() {
+      function typeChar() {
         if (index < finalMessage.length) {
           textElem.textContent += finalMessage.charAt(index);
           index++;
-          setTimeout(typeNextChar, 100);
+          setTimeout(typeChar, 90);
         }
       }
-      typeNextChar();
+      typeChar();
     }
 
+    buildNeonTunnel();
     window.addEventListener("pointerdown", startExperience);
   </script>
 </body>
