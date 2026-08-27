@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,6 +31,7 @@
       pointer-events: none;
       text-align: center;
       text-shadow: 0 0 10px rgba(255, 105, 180, 0.6);
+      transition: opacity 0.5s ease;
     }
 
     @keyframes pulse {
@@ -38,13 +39,24 @@
       50% { opacity: 1; transform: scale(1.05); }
     }
 
+    /* Screen par float hone wala container */
+    .float-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+      animation: floatAround 60s ease-in-out forwards;
+    }
+
+    /* Gol-gol ghoomne wala ring */
     .bundle-ring {
       position: absolute;
       width: 0;
       height: 0;
       pointer-events: none;
       transform: translate(-50%, -50%);
-      /* 60s tak continuously ghoomne ke liye */
       animation: continuousSpin 60s linear forwards;
     }
 
@@ -52,47 +64,108 @@
       position: absolute;
       white-space: nowrap;
       font-weight: 900;
-      /* Bada text size */
       font-size: 2.2rem;
       color: #ff2a74;
       text-shadow: 0 0 15px #ff2a74, 0 0 30px #ff0055, 0 0 45px #ff75a0;
       transform: translate(-50%, -50%);
     }
 
+    /* Typing message box */
+    #final-message-box {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    #typewriter-text {
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-shadow: 0 0 15px #ff2a74, 0 0 25px #ff75a0;
+      display: inline-block;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      height: 2.2rem;
+      background-color: #ff2a74;
+      vertical-align: bottom;
+      margin-left: 5px;
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Fast spin animation */
     @keyframes continuousSpin {
       0% {
-        transform: translate(-50%, -50%) rotate(0deg) scale(0.4);
+        transform: translate(-50%, -50%) rotate(0deg) scale(0.3);
         opacity: 0;
       }
       2% {
         transform: translate(-50%, -50%) rotate(72deg) scale(1);
         opacity: 1;
       }
-      96% {
+      97% {
         opacity: 1;
       }
       100% {
-        /* 60 seconds me 30 poore chakkar lagayega */
-        transform: translate(-50%, -50%) rotate(10800deg) scale(1);
+        transform: translate(-50%, -50%) rotate(10800deg) scale(0.2);
         opacity: 0;
       }
+    }
+
+    /* Screen ke alag alag kono me ghoomne ka path */
+    @keyframes floatAround {
+      0%   { transform: translate(-50%, -50%); }
+      20%  { transform: translate(-80%, -80%); }
+      40%  { transform: translate(-20%, -30%); }
+      60%  { transform: translate(-70%, -40%); }
+      80%  { transform: translate(-30%, -70%); }
+      100% { transform: translate(-50%, -50%); }
     }
   </style>
 </head>
 <body>
 
-  <div class="hint">✨ Tap anywhere on the screen ✨</div>
+  <div class="hint" id="hint">✨ Tap anywhere on the screen ✨</div>
+
+  <div id="final-message-box">
+    <span id="typewriter-text"></span><span class="cursor"></span>
+  </div>
 
   <script>
-    const message = "I LOVE YOU ❤️";
-    const totalWords = 8;  // Bada font hone ki wajah se 8 words perfect circle banayenge
-    const radius = 220;    // Bada circle ka ghera
+    const circleMessage = "I LOVE YOU ❤️";
+    const totalWords = 8;
+    const radius = 220;
+    let isTriggered = false;
 
-    function createCircleBundle(x, y) {
+    const finalMessage = "Rizwan aap se bahut pyar karta hai ❤️";
+
+    function startExperience() {
+      if (isTriggered) return;
+      isTriggered = true;
+
+      // Tap hint ko hide karein
+      document.getElementById("hint").style.opacity = "0";
+
+      // Floating wrapper
+      const floatWrap = document.createElement("div");
+      floatWrap.className = "float-container";
+
+      // Rotating Ring
       const ring = document.createElement("div");
       ring.className = "bundle-ring";
-      ring.style.left = `${x}px`;
-      ring.style.top = `${y}px`;
 
       for (let i = 0; i < totalWords; i++) {
         const angle = (i / totalWords) * (2 * Math.PI);
@@ -102,23 +175,39 @@
 
         const span = document.createElement("span");
         span.className = "text-item";
-        span.innerText = message;
+        span.innerText = circleMessage;
         span.style.transform = `translate(${itemX}px, ${itemY}px) rotate(${deg}deg)`;
 
         ring.appendChild(span);
       }
 
-      document.body.appendChild(ring);
+      floatWrap.appendChild(ring);
+      document.body.appendChild(floatWrap);
 
-      // Pura 1 minute (60,000 ms) baad circle remove hoga
+      // 60 Seconds (60000ms) baad circle remove hokar typing shuru hogi
       setTimeout(() => {
-        ring.remove();
+        floatWrap.remove();
+        showTypewriterMessage();
       }, 60000);
     }
 
-    window.addEventListener("pointerdown", (e) => {
-      createCircleBundle(e.clientX, e.clientY);
-    });
+    function showTypewriterMessage() {
+      const box = document.getElementById("final-message-box");
+      const textElem = document.getElementById("typewriter-text");
+      box.style.display = "block";
+
+      let index = 0;
+      function typeNextChar() {
+        if (index < finalMessage.length) {
+          textElem.textContent += finalMessage.charAt(index);
+          index++;
+          setTimeout(typeNextChar, 100); // Typing speed
+        }
+      }
+      typeNextChar();
+    }
+
+    window.addEventListener("pointerdown", startExperience);
   </script>
 </body>
 </html>
