@@ -13,21 +13,24 @@
     }
 
     body {
-      background: radial-gradient(circle, #1a0826, #05010a);
+      background: radial-gradient(circle, #20052b, #05010a);
       height: 100vh;
       overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .hint {
       color: #ff69b4;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
+      font-weight: 600;
       letter-spacing: 2px;
       animation: pulse 1.5s infinite;
       pointer-events: none;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(255, 105, 180, 0.6);
     }
 
     @keyframes pulse {
@@ -41,29 +44,36 @@
       height: 0;
       pointer-events: none;
       transform: translate(-50%, -50%);
-      animation: rotateAndFade 2.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+      /* 60s tak continuously ghoomne ke liye */
+      animation: continuousSpin 60s linear forwards;
     }
 
     .text-item {
       position: absolute;
       white-space: nowrap;
-      font-weight: 700;
-      font-size: 1rem;
+      font-weight: 900;
+      /* Bada text size */
+      font-size: 2.2rem;
       color: #ff2a74;
-      text-shadow: 0 0 10px #ff2a74, 0 0 20px #ff75a0;
+      text-shadow: 0 0 15px #ff2a74, 0 0 30px #ff0055, 0 0 45px #ff75a0;
       transform: translate(-50%, -50%);
     }
 
-    @keyframes rotateAndFade {
+    @keyframes continuousSpin {
       0% {
-        transform: translate(-50%, -50%) rotate(0deg) scale(0.2);
+        transform: translate(-50%, -50%) rotate(0deg) scale(0.4);
         opacity: 0;
       }
-      20% {
+      2% {
+        transform: translate(-50%, -50%) rotate(72deg) scale(1);
+        opacity: 1;
+      }
+      96% {
         opacity: 1;
       }
       100% {
-        transform: translate(-50%, -50%) rotate(360deg) scale(1.6);
+        /* 60 seconds me 30 poore chakkar lagayega */
+        transform: translate(-50%, -50%) rotate(10800deg) scale(1);
         opacity: 0;
       }
     }
@@ -75,8 +85,8 @@
 
   <script>
     const message = "I LOVE YOU ❤️";
-    const totalWords = 12; // Circle me kitni baar text repeat hoga
-    const radius = 110;    // Circle ka ghera (size)
+    const totalWords = 8;  // Bada font hone ki wajah se 8 words perfect circle banayenge
+    const radius = 220;    // Bada circle ka ghera
 
     function createCircleBundle(x, y) {
       const ring = document.createElement("div");
@@ -100,9 +110,10 @@
 
       document.body.appendChild(ring);
 
+      // Pura 1 minute (60,000 ms) baad circle remove hoga
       setTimeout(() => {
         ring.remove();
-      }, 2500);
+      }, 60000);
     }
 
     window.addEventListener("pointerdown", (e) => {
